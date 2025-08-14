@@ -13,14 +13,14 @@ export default function TransactionsPage() {
 
         {/* Corpo */}
         <div className="flex flex-col items-center justify-center flex-1 relative">
-          <button className="absolute top-6 right-6 bg-[#2E12E4] hover:bg-[#1d0ab2] text-white font-bold px-6 py-3 rounded-lg shadow-lg flex items-center gap-2">
-            ADICIONAR <span className="text-xl">+</span>
+          <button className="absolute top-6 right-6 bg-[#0C0073] hover:bg-[#1d0ab2] text-white font-bold px-6 py-3 rounded-lg shadow-lg flex items-center gap-2">
+            ADICIONAR <span className="text-xl color-black">+</span>
           </button>
 
           <img
-            src="/hourglass.svg"
+            src="/images/transacoeshomem.svg"
             alt="Sem transações"
-            className="w-40 h-40"
+            className="w-60 h-60"
           />
           <p className="mt-4 italic text-gray-600">
             Você não possui nenhuma transação ainda...
