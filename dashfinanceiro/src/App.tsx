@@ -3,6 +3,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import TransactionsPage from './pages/TransactionsPage'
+import { Goals } from './pages/Goals'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <BrowserRouter>
         <Routes>
           <Route path="/" element={<TransactionsPage/>}/>
+          <Route path='/goals' element={<Goals/>}/>
 
         </Routes>
         </BrowserRouter>

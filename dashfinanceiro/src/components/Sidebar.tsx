@@ -27,7 +27,7 @@ export default function Sidebar() {
         <nav className="flex flex-col mt-4">
           
           <a href="#" className="flex items-center gap-2 px-4 py-2 bg-[#604BEE] text-xl font-bold text-[#0C0073] rounded-r-full">
-            <FaRegFileAlt />{!colapsada && "Transações"}
+            <FaRegFileAlt />{!colapsada && "Transações"} 
           </a>
           <a href="#" className="flex items-center gap-2 px-4 py-2 font-bold text-xl text-white hover:bg-[#604BEE] rounded-r-full">
             <RiDashboardFill /> {!colapsada && "Dashboard"}
@@ -35,7 +35,7 @@ export default function Sidebar() {
           <a href="#" className="flex items-center gap-2 px-4 py-2 font-bold text-xl text-white hover:bg-[#604BEE] rounded-r-full">
             <IoMdColorPalette /> {!colapsada && "Tema"}
           </a>
-          <a href="#" className="flex items-center gap-2 px-4 py-2 font-bold text-xl text-white hover:bg-[#604BEE] rounded-r-full">
+          <a href="/goals" className="flex items-center gap-2 px-4 py-2 font-bold text-xl text-white hover:bg-[#604BEE] rounded-r-full">
             <GiTargetPrize /> {!colapsada && "Metas"}
           </a>
         </nav>
