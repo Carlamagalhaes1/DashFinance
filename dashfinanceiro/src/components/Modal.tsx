@@ -4,6 +4,7 @@ import { useState } from "react"
 export function Modal() {
 
     const [open, setOpen] = useState(false)
+    
     return (
         <div>
             <div>
