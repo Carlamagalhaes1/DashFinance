@@ -1,6 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { Modal } from "../components/Modal";
+import { TransactionsList } from "../components/TransactionsList";
 
 export default function TransactionsPage() {
   return (
@@ -15,6 +16,7 @@ export default function TransactionsPage() {
         
         <div className="flex flex-col items-center justify-center flex-1 relative">
             <Modal></Modal>
+            <TransactionsList></TransactionsList>
 
           <img
             src="/images/transacoeshomem.svg"
