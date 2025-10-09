@@ -15,7 +15,7 @@ export function Layout() {
         return "DASHBOARD";
       case "/tema":
         return "TEMA";
-      case "/metas":
+      case "/goals":
         return "SUAS METAS";
       default:
         return "ASSIANAIA";

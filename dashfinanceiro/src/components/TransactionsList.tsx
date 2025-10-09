@@ -14,7 +14,7 @@ export function TransactionsList() {
 
   return (
     <div className="bg-gray-100 rounded-2xl p-4 shadow-md w-full max-w-3xl mx-auto">
-      {/* Cabeçalho */}
+  
       <div className="flex items-center justify-between mb-3">
         <h2 className="font-semibold text-lg text-gray-800">Histórico de transações:</h2>
 
@@ -27,7 +27,7 @@ export function TransactionsList() {
         </button>
       </div>
 
-      {/* Cabeçalho da tabela */}
+      
       <div className="grid grid-cols-4 text-sm font-semibold text-gray-700 px-2">
         <span>NOME</span>
         <span>DATA</span>
