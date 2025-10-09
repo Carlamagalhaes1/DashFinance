@@ -13,11 +13,9 @@ export function TransactionsList() {
   ];
 
   return (
-    <div className="bg-gray-100 rounded-2xl p-4 shadow-md w-full max-w-3xl mx-auto">
-  
+    <div className="bg-gray-100 rounded-2xl p-4 shadow-md w-full max-w-3xl mx-auto">  
       <div className="flex items-center justify-between mb-3">
         <h2 className="font-semibold text-lg text-gray-800">Histórico de transações:</h2>
-
         <button
           onClick={() => setFilterOpen(!filterOpen)}
           className="flex items-center gap-1 bg-gray-200 px-3 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-300 transition"
@@ -26,8 +24,7 @@ export function TransactionsList() {
           <ChevronDown size={16} className={`transition-transform ${filterOpen ? "rotate-180" : ""}`} />
         </button>
       </div>
-
-      
+     
       <div className="grid grid-cols-4 text-sm font-semibold text-gray-700 px-2">
         <span>NOME</span>
         <span>DATA</span>
@@ -35,7 +32,6 @@ export function TransactionsList() {
         <span className="text-right">VALOR</span>
       </div>
 
-      {/* Linhas */}
       <div className="mt-2 flex flex-col gap-2">
         {transactions.map((t, index) => (
           <div
