@@ -5,6 +5,7 @@ import './App.css'
 import TransactionsPage from './pages/TransactionsPage'
 import { Goals } from './pages/Goals'
 import { Layout } from './layout'
+import Dash from './pages/Dashboard'
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
             <Route  element={<Layout />}>
               <Route path="/" element={<TransactionsPage />} />
               <Route path='/goals' element={<Goals />} />
-
+              <Route path='/dashboard' element={<Dash/>}/>
             </Route>
 
 
