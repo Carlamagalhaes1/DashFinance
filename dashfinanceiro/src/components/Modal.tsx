@@ -60,13 +60,17 @@ export function Modal({ open, onClose, onAdd }: ModalProps) {
                 onChange={(e) => setForm({ ...form, data: e.target.value })}
                 className="border rounded-md p-2 focus:ring-2 focus:ring-indigo-400"
               />
-              <input
-                type="text"
-                placeholder="Tipo"
+              <select
                 value={form.tipo}
                 onChange={(e) => setForm({ ...form, tipo: e.target.value })}
                 className="border rounded-md p-2 focus:ring-2 focus:ring-indigo-400"
-              />
+              >
+                <option value="">Selecione o tipo</option>
+                <option value="casa">Casa</option>
+                <option value="carro">Carro</option>
+                <option value="moto">Moto</option>
+              </select>
+
               <input
                 type="text"
                 placeholder="Valor (ex: R$ 50,00)"

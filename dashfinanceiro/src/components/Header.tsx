@@ -1,11 +1,15 @@
 import { FaSearch } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
 
-export default function Header() {
+type HeaderProps = {
+  title: string;
+}
+
+export default function Header({title} : HeaderProps) {
   return (
     <header className="relative flex items-center justify-between bg-[#d3d1f08f] px-6 py-4">
      
-      <h1 className="font-bold text-lg text-[#0C0073]">SUAS TRANSAÇÕES</h1>
+      <h1 className="font-bold text-lg text-[#0C0073]">{title}</h1>
 
      
       <div className="absolute left-1/2 -translate-x-1/2">
