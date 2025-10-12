@@ -17,7 +17,7 @@ export function Goals() {
   }
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       <GoalForm onAdd={adicionarMeta} />
       <GoalList goals={goals} />
     </div>

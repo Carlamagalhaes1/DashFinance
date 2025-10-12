@@ -23,7 +23,7 @@ export function GoalForm({ onAdd }: GoalFormProps) {
 
     onAdd({ nome, valor, inicio, fim });
 
-    // limpar campos
+    
     setNome("");
     setValor("");
     setInicio("");
