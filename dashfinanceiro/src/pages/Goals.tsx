@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GoalForm } from "../components/GoalForm";
 import { GoalList } from "../components/GoalList";
 
@@ -12,8 +12,17 @@ export interface Goal {
 export function Goals() {
   const [goals, setGoals] = useState<Goal[]>([]);
 
+  useEffect(() => {
+    const metasSalvas = localStorage.getItem("metas");
+    if (metasSalvas) {
+      setGoals(JSON.parse(metasSalvas));
+    }
+  }, []);
+
   function adicionarMeta(novaMeta: Goal) {
-    setGoals((prev) => [...prev, novaMeta]);
+    const novasMetas = [...goals, novaMeta];
+    setGoals(novasMetas);
+    localStorage.setItem("metas", JSON.stringify(novasMetas));
   }
 
   return (
