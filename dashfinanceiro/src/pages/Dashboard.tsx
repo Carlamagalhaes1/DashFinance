@@ -1,46 +1,127 @@
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,} from "recharts";
+import { useEffect, useState } from "react";
+import {
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell
+} from "recharts";
+
+interface Transacao {
+  nome: string;
+  data: string;
+  tipo: string;
+  valor: string;
+}
+
+interface Usuario {
+  nome: string;
+  senha: string;
+  salario: string;
+}
 
 export default function Dash() {
-  const pieData = [
-    { name: "Alimentação", value: 10 },
-    { name: "Compras pessoais", value: 10 },
-    { name: "Transporte", value: 10 },
-    { name: "Saúde", value: 10 },
-    { name: "Casa", value: 10 },
-    { name: "Outros", value: 50 },
-  ];
+  const [transacoes, setTransacoes] = useState<Transacao[]>([]);
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const [totalGasto, setTotalGasto] = useState(0);
+  const [salario, setSalario] = useState(0);
+  const [pieData, setPieData] = useState<{ name: string; value: number }[]>([]);
+  const [lineData, setLineData] = useState<{ name: string; valor: number }[]>([]);
+  
+  // Guardamos também o "mês anterior" simulado
+  const [totalMesPassado, setTotalMesPassado] = useState(0);
 
   const COLORS = ["#FF6384", "#36A2EB", "#FFCE56", "#8E44AD", "#2ECC71", "#E67E22"];
 
-  const lineData = [
-    { name: "Alimen.", valor: 1000 },
-    { name: "Comp. P", valor: 2500 },
-    { name: "Transp", valor: 1800 },
-    { name: "Saúde", valor: 1500 },
-    { name: "Casa", valor: 2200 },
-    { name: "Out", valor: 2900 },
-  ];
+  useEffect(() => {
+    const usuarioLogado: Usuario | null = JSON.parse(localStorage.getItem("usuarioLogado") || "null");
+    if (!usuarioLogado) return;
+
+    setUsuario(usuarioLogado);
+
+    // Busca as transações desse usuário
+    const chave = `transacoes_${usuarioLogado.nome}`;
+    const salvas: Transacao[] = JSON.parse(localStorage.getItem(chave) || "[]");
+    setTransacoes(salvas);
+
+    if (salvas.length > 0) {
+      const total = salvas.reduce(
+        (acc, t) => acc + parseFloat(t.valor.replace(",", ".")),
+        0
+      );
+      setTotalGasto(total);
+
+      // Salário atual - gastos = saldo
+      const salarioNum = parseFloat(usuarioLogado.salario.replace(",", "."));
+      setSalario(salarioNum - total);
+
+      // Exemplo: mês passado = 80% do total atual (simulação)
+      const mesAnterior = total * 0.8;
+      setTotalMesPassado(mesAnterior);
+
+      // Agrupar por tipo de gasto (pra pizza e linha)
+      const porCategoria: Record<string, number> = {};
+      salvas.forEach((t) => {
+        porCategoria[t.tipo] =
+          (porCategoria[t.tipo] || 0) + parseFloat(t.valor.replace(",", "."));
+      });
+
+      const pieArr = Object.entries(porCategoria).map(([name, value]) => ({ name, value }));
+      setPieData(pieArr);
+
+      const lineArr = Object.entries(porCategoria).map(([name, valor]) => ({ name, valor }));
+      setLineData(lineArr);
+    }
+
+  
+  }, []);
+
+  // Cálculo das porcentagens dinâmicas
+  const variacaoGastos = totalMesPassado
+    ? ((totalGasto - totalMesPassado) / totalMesPassado) * 100
+    : 0;
+
+  const variacaoSaldo = usuario
+    ? ((salario - parseFloat(usuario.salario)) / parseFloat(usuario.salario)) * 100
+    : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50  flex flex-col gap-5 font-sans text-xs md:text-sm">
+    <div className="min-h-screen bg-gray-50 flex flex-col gap-5 font-sans text-xs md:text-sm">
 
+      {/* Cards principais */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        
+        {/* GASTOS NO MÊS */}
         <div className="bg-[#EBEBEB] rounded-xl shadow p-3 flex flex-col">
           <h2 className="text-gray-600 font-semibold text-md">Gastos no mês</h2>
-          <p className="text-lg font-semibold text-gray-900">R$ 1000,00</p>
-          <span className="text-green-500 text-[11px] mt-1">+23,3% desde o mês passado</span>
+          <p className="text-lg font-semibold text-gray-900">
+            R$ {totalGasto.toFixed(2)}
+          </p>
+          <span className={`text-[11px] mt-1 ${variacaoGastos >= 0 ? "text-red-500" : "text-green-500"}`}>
+            {variacaoGastos >= 0 ? "+" : ""}
+            {variacaoGastos.toFixed(1)}% desde o mês passado
+          </span>
         </div>
 
+        {/* TOTAL DE TRANSAÇÕES */}
         <div className="bg-[#EBEBEB] rounded-xl shadow p-3 flex flex-col">
           <h2 className="text-gray-600 font-semibold text-md">Total de Transações</h2>
-          <p className="text-lg font-semibold text-gray-900">20</p>
-          <span className="text-blue-500 text-[11px] mt-1">+6,2% desde o mês passado</span>
+          <p className="text-lg font-semibold text-gray-900">{transacoes.length}</p>
+          <span className="text-blue-500 text-[11px] mt-1">
+            {(transacoes.length * 3.2).toFixed(1)}% desde o mês passado
+          </span>
         </div>
 
+        {/* SALDO SALÁRIO */}
         <div className="bg-[#EBEBEB] rounded-xl shadow p-3 flex flex-col">
-          <h2 className="text-gray-600 font-semibold text-md">Saldo salário</h2>
-          <p className="text-lg font-semibold text-gray-900">R$ 230,00</p>
-          <span className="text-red-500 text-[11px] mt-1">-17,6% desde o mês passado</span>
+          <h2 className="text-gray-600 font-semibold text-md">Saldo Salário</h2>
+          <p
+            className={`text-lg font-semibold ${
+              salario >= 0 ? "text-gray-900" : "text-red-600"
+            }`}
+          >
+            R$ {salario.toFixed(2)}
+          </p>
+          <span className={`text-[11px] mt-1 ${variacaoSaldo >= 0 ? "text-green-500" : "text-red-500"}`}>
+            {variacaoSaldo.toFixed(1)}% em relação ao salário base
+          </span>
         </div>
       </div>
 
@@ -56,9 +137,7 @@ export default function Dash() {
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  labelLine={false}
                   outerRadius={50}
-                  fill="#8884d8"
                   dataKey="value"
                 >
                   {pieData.map((_, index) => (
@@ -75,7 +154,7 @@ export default function Dash() {
                   className="inline-block w-2.5 h-2.5 mr-1 rounded"
                   style={{ backgroundColor: COLORS[i % COLORS.length] }}
                 ></span>
-                {item.name} {item.value}%
+                {item.name} — R$ {item.value.toFixed(2)}
               </li>
             ))}
           </ul>
@@ -83,7 +162,7 @@ export default function Dash() {
 
         {/* Linha */}
         <div className="bg-[#EBEBEB] rounded-xl shadow p-3">
-          <h2 className="text-gray-800 font-semibold mb-2 text-md">Despesas Mensais</h2>
+          <h2 className="text-gray-800 font-semibold mb-2 text-md">Despesas por categoria</h2>
           <ResponsiveContainer width="100%" height={190}>
             <LineChart data={lineData}>
               <XAxis dataKey="name" tick={{ fontSize: 10 }} />
@@ -93,20 +172,6 @@ export default function Dash() {
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </div>
-
-      {/* Metas pessoais */}
-      <div className="grid grid-cols-1 h-40 md:grid-cols-3 gap-5">
-        <div className="bg-[#EBEBEB] rounded-xl shadow p-3 md:col-span-2">
-          <h2 className="text-gray-800 font-semibold mb-2 text-md">Metas pessoais</h2>
-          <div className="flex flex-col gap-2">
-            <div className="bg-purple-200 h-4 rounded-md w-3/4"></div>
-            <div className="bg-purple-200 h-4 rounded-md w-2/3"></div>
-            <div className="bg-purple-200 h-4 rounded-md w-1/2"></div>
-          </div>
-        </div>
-
-        <div className="bg-[#EBEBEB] rounded-xl shadow p-3"></div>
       </div>
     </div>
   );

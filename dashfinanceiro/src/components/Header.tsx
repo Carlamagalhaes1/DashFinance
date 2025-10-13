@@ -9,7 +9,7 @@ export default function Header({ title }: HeaderProps) {
   const [nome, setNome] = useState<string>("");
 
   useEffect(() => {
-    const usuarioSalvo = localStorage.getItem("usuario");
+    const usuarioSalvo = localStorage.getItem("usuarioLogado");
     if (usuarioSalvo) {
       const usuario = JSON.parse(usuarioSalvo);
       setNome(usuario.nome || "");

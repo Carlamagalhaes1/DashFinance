@@ -73,7 +73,6 @@ export function Modal({ open, onClose, onAdd }: ModalProps) {
                 <option value="casa">Casa</option>
                 <option value="outros">Outros</option>
               </select>
-
               <input
                 type="text"
                 placeholder="Valor (ex: R$ 50,00)"
@@ -81,7 +80,6 @@ export function Modal({ open, onClose, onAdd }: ModalProps) {
                 onChange={(e) => setForm({ ...form, valor: e.target.value })}
                 className="border rounded-md p-2 focus:ring-2 focus:ring-indigo-400"
               />
-
               <div className="flex justify-end gap-3 mt-2">
                 <button
                   type="button"

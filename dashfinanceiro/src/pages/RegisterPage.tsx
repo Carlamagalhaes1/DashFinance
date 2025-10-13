@@ -1,80 +1,74 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+interface Usuario {
+  nome: string;
+  senha: string;
+  salario: string;
+}
+
 export default function RegisterPage() {
-  const [nome, setNome] = useState("");
-  const [senha, setSenha] = useState("");
-  const [salario, setSalario] = useState("");
+  const [form, setForm] = useState<Usuario>({ nome: "", senha: "", salario: "" });
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
-    const novoUsuario = { nome, senha, salario };
-    const usuariosSalvos = JSON.parse(localStorage.getItem("usuarios") || "[]");
-
-    // 🔹 Evita duplicar nomes
-    const jaExiste = usuariosSalvos.some((u: { nome: string }) => u.nome === nome);
-    if (jaExiste) {
-      alert("Esse nome de usuário já está cadastrado!");
+    const usuariosSalvos: Usuario[] = JSON.parse(localStorage.getItem("usuarios") || "[]")
+    if (usuariosSalvos.some((u) => u.nome === form.nome)) {
+      alert("Usuário já existe!");
       return;
     }
 
-    usuariosSalvos.push(novoUsuario);
+    // Adiciona novo usuário
+    usuariosSalvos.push(form);
     localStorage.setItem("usuarios", JSON.stringify(usuariosSalvos));
 
     alert("Cadastro realizado com sucesso!");
     navigate("/");
-  };
+  }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#0C0073]">
-      <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 w-full max-w-sm shadow-lg">
-        <h1 className="text-3xl font-bold text-white text-center mb-6">
-          Cadastro
-        </h1>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            type="text"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            placeholder="Nome"
-            className="w-full px-3 py-2 rounded-lg border border-[#BFB8FF] bg-transparent text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#BFB8FF]"
-            required
-          />
-          <input
-            type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            placeholder="Senha"
-            className="w-full px-3 py-2 rounded-lg border border-[#BFB8FF] bg-transparent text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#BFB8FF]"
-            required
-          />
-          <input
-            type="number"
-            value={salario}
-            onChange={(e) => setSalario(e.target.value)}
-            placeholder="Salário"
-            className="w-full px-3 py-2 rounded-lg border border-[#BFB8FF] bg-transparent text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#BFB8FF]"
-            required
-          />
-
-          <button
-            type="submit"
-            className="mt-2 bg-[#BFB8FF] text-[#0C0073] font-semibold py-2 rounded-lg hover:bg-white transition"
-          >
-            Cadastrar
-          </button>
-
-          <p className="text-center text-white/70 text-sm mt-3">
-            Já tem conta?{" "}
-            <a href="/" className="text-[#BFB8FF] hover:underline">
-              Faça login
-            </a>
-          </p>
-        </form>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-indigo-50">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-2xl shadow-lg w-80 flex flex-col gap-3"
+      >
+        <h2 className="text-lg font-semibold text-indigo-700">Criar conta</h2>
+        <input
+          type="text"
+          placeholder="Nome"
+          value={form.nome}
+          onChange={(e) => setForm({ ...form, nome: e.target.value })}
+          className="border rounded-md p-2"
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={form.senha}
+          onChange={(e) => setForm({ ...form, senha: e.target.value })}
+          className="border rounded-md p-2"
+        />
+        <input
+          type="text"
+          placeholder="Salário (ex: 3500)"
+          value={form.salario}
+          onChange={(e) => setForm({ ...form, salario: e.target.value })}
+          className="border rounded-md p-2"
+        />
+        <button
+          type="submit"
+          className="bg-indigo-600 text-white rounded-md py-2 hover:bg-indigo-700 transition"
+        >
+          Cadastrar
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="text-indigo-500 text-sm"
+        >
+          Já tem conta? Faça o login aqui
+        </button>
+      </form>
     </div>
   );
 }

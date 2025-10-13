@@ -1,7 +1,9 @@
+
 import { useEffect, useState } from "react";
 import { Modal } from "../components/Modal";
+import { useNavigate } from "react-router-dom";
+import '../assets/fundo.png'
 import { ChevronDown, Plus } from "lucide-react";
-import FundoImage from "../assets/fundo.png"; 
 
 interface Transacao {
   nome: string;
@@ -10,33 +12,48 @@ interface Transacao {
   valor: string;
 }
 
-export default function TransactionsPage() {
-  const [transactions, setTransactions] = useState<Transacao[]>([]);
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface Usuario {
+  nome: string;
+  senha: string;
+  salario: string;
+}
 
-  // 🔹 Carregar transações do localStorage ao abrir a página
+export default function TransactionsPage() {
+  const [transacoes, setTransacoes] = useState<Transacao[]>([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const usuarioLogado: Usuario | null = JSON.parse(
+    localStorage.getItem("usuarioLogado") || "null"
+  );
+
+
   useEffect(() => {
-    const saved = localStorage.getItem("transacoes");
-    if (saved) {
-      setTransactions(JSON.parse(saved));
+    if (!usuarioLogado) {
+      navigate("/");
+      return;
     }
+    const chave = `transacoes_${usuarioLogado.nome}`;
+    const salvas: Transacao[] = JSON.parse(localStorage.getItem(chave) || "[]");
+    setTransacoes(salvas);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 🔹 Atualizar localStorage sempre que mudar a lista
-  useEffect(() => {
-    localStorage.setItem("transacoes", JSON.stringify(transactions));
-  }, [transactions]);
-
-  function addTransaction(novaTransacao: Transacao) {
-    setTransactions((prev) => [...prev, novaTransacao]);
+  function handleAdd(transacao: Transacao) {
+    if (!usuarioLogado) return;
+    const chave = `transacoes_${usuarioLogado.nome}`;
+    const atualizadas = [...transacoes, transacao];
+    setTransacoes(atualizadas);
+    localStorage.setItem(chave, JSON.stringify(atualizadas));
   }
+
+  
 
   return (
     <div className="flex flex-col items-center justify-center flex-1 relative p-6">
       <div className="w-full flex justify-end mb-4">
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => setModalOpen(true)}
           className="bg-[#0C0073] flex text-white font-bold mr-2 px-4 py-2 rounded-lg hover:bg-blue-900 transition"
         >
           NOVA TRANSAÇÃO
@@ -44,11 +61,11 @@ export default function TransactionsPage() {
         </button>
       </div>
 
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAdd={addTransaction} />
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} onAdd={handleAdd} />
 
-      {transactions.length === 0 ? (
+      {transacoes.length === 0 ? (
         <div className="flex flex-col items-center justify-center mt-20">
-          <img src={FundoImage} alt="Sem transações" className="w-40 h-40 mb-4" />
+          <img src="fundo.png" alt="Sem transações" className="w-40 h-40 mb-4" />
           <p className="text-gray-600 italic">Você não possui nenhuma transação ainda...</p>
         </div>
       ) : (
@@ -56,11 +73,11 @@ export default function TransactionsPage() {
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-bold text-lg text-[#000D43]">Histórico de transações:</h2>
             <button
-              onClick={() => setFilterOpen(!filterOpen)}
+              
               className="flex items-center gap-1 bg-gray-50 px-3 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-300 transition"
             >
               Filtrar por
-              <ChevronDown size={16} className={`transition-transform ${filterOpen ? "rotate-180" : ""}`} />
+              <ChevronDown size={16}  />
             </button>
           </div>
 
@@ -72,7 +89,7 @@ export default function TransactionsPage() {
           </div>
 
           <div className="mt-2 flex flex-col gap-2 max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-indigo-400 scrollbar-track-gray-200">
-            {transactions.map((t, index) => (
+            {transacoes.map((t, index) => (
               <div
                 key={index}
                 className="grid grid-cols-4 items-center bg-[#BFB8FF] text-[#000D43] rounded-2xl px-5 py-2 shadow-2xl"
@@ -87,5 +104,9 @@ export default function TransactionsPage() {
         </div>
       )}
     </div>
+    
   );
 }
+
+
+ 

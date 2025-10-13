@@ -12,8 +12,8 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   function handleLogout() {
-    localStorage.removeItem("usuarioLogado"); // 🔹 limpa login salvo
-    navigate("/"); // 🔹 volta pra tela de login
+    localStorage.removeItem("usuarioLogado"); //  limpa login salvo
+    navigate("/");
   }
 
   return (
@@ -40,7 +40,7 @@ export default function Sidebar() {
 
         <nav className="flex flex-col mt-4">
           <NavLink
-            to="/"
+            to="/transacoes"
             className={({ isActive }) =>
               `flex items-center gap-2 px-4 py-2 text-xl font-bold rounded-r-full transition-colors
        ${
@@ -117,7 +117,7 @@ export default function Sidebar() {
         </nav>
       </div>
 
-      {/* 🔹 Botão de sair com redirecionamento */}
+      
       <div
         onClick={handleLogout}
         className="flex items-center gap-2 px-4 py-4 text-white cursor-pointer hover:bg-[#604BEE] transition-colors"

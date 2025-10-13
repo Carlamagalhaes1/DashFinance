@@ -1,6 +1,6 @@
 
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import {  Route, Routes } from 'react-router-dom'
 import './App.css'
 import TransactionsPage from './pages/TransactionsPage'
 import { Goals } from './pages/Goals'
@@ -17,7 +17,7 @@ function App() {
     <>
 
       <div>
-        <BrowserRouter>
+        
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage/>}/>
@@ -31,7 +31,7 @@ function App() {
 
 
           </Routes>
-        </BrowserRouter>
+       
       </div>
     </>
   )
