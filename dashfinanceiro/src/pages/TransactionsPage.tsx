@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "../components/Modal";
-import { ChevronDown } from "lucide-react";
-import FundoImage from "../assets/fundo.png"; // <-- Caminho da imagem
+import { ChevronDown, Plus } from "lucide-react";
+import FundoImage from "../assets/fundo.png"; 
 
 interface Transacao {
   nome: string;
@@ -15,17 +15,32 @@ export default function TransactionsPage() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // 🔹 Carregar transações do localStorage ao abrir a página
+  useEffect(() => {
+    const saved = localStorage.getItem("transacoes");
+    if (saved) {
+      setTransactions(JSON.parse(saved));
+    }
+  }, []);
+
+  // 🔹 Atualizar localStorage sempre que mudar a lista
+  useEffect(() => {
+    localStorage.setItem("transacoes", JSON.stringify(transactions));
+  }, [transactions]);
+
   function addTransaction(novaTransacao: Transacao) {
     setTransactions((prev) => [...prev, novaTransacao]);
   }
 
   return (
-    <div className="flex flex-col items-center justify-center flex-1  relative p-6">
+    <div className="flex flex-col items-center justify-center flex-1 relative p-6">
       <div className="w-full flex justify-end mb-4">
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-indigo-600 text-white mr-2 px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
-          Nova transação
+          className="bg-[#0C0073] flex text-white font-bold mr-2 px-4 py-2 rounded-lg hover:bg-blue-900 transition"
+        >
+          NOVA TRANSAÇÃO
+          <Plus size={19} strokeWidth={3} className="ml-2 mt-0.5" />
         </button>
       </div>
 
@@ -34,7 +49,7 @@ export default function TransactionsPage() {
       {transactions.length === 0 ? (
         <div className="flex flex-col items-center justify-center mt-20">
           <img src={FundoImage} alt="Sem transações" className="w-40 h-40 mb-4" />
-          <p className="text-gray-600 italic">você não possui nenhuma transação ainda....</p>
+          <p className="text-gray-600 italic">Você não possui nenhuma transação ainda...</p>
         </div>
       ) : (
         <div className="bg-[#EBEBEB] mt-24 rounded-2xl p-4 shadow-md w-full max-w-5xl mx-auto">
@@ -42,14 +57,15 @@ export default function TransactionsPage() {
             <h2 className="font-bold text-lg text-[#000D43]">Histórico de transações:</h2>
             <button
               onClick={() => setFilterOpen(!filterOpen)}
-              className="flex items-center gap-1 bg-gray-200 px-3 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-300 transition">
+              className="flex items-center gap-1 bg-gray-50 px-3 py-1.5 rounded-md text-sm text-gray-700 hover:bg-gray-300 transition"
+            >
               Filtrar por
               <ChevronDown size={16} className={`transition-transform ${filterOpen ? "rotate-180" : ""}`} />
             </button>
           </div>
 
           <div className="grid grid-cols-4 text-sm font-semibold text-gray-700 px-4">
-            <span>NOME</span> 
+            <span>NOME</span>
             <span>DATA</span>
             <span>TIPO</span>
             <span className="text-right">VALOR</span>
@@ -59,8 +75,9 @@ export default function TransactionsPage() {
             {transactions.map((t, index) => (
               <div
                 key={index}
-                className="grid grid-cols-4 items-center bg-[#BFB8FF] text-[#000D43] rounded-2xl px-5 py-2 shadow-2xl">
-                <span>{t.nome} </span>
+                className="grid grid-cols-4 items-center bg-[#BFB8FF] text-[#000D43] rounded-2xl px-5 py-2 shadow-2xl"
+              >
+                <span>{t.nome}</span>
                 <span>{t.data}</span>
                 <span>{t.tipo}</span>
                 <span className="text-right font-medium">{t.valor}</span>

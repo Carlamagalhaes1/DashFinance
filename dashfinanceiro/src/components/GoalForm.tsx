@@ -33,7 +33,7 @@ export function GoalForm({ onAdd }: GoalFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-gray-100 rounded-2xl p-6 mb-8 shadow-md flex flex-wrap gap-4 items-end justify-between"
+      className="bg-[#EBEBEB] rounded-2xl p-6 mb-8 shadow-md flex flex-wrap gap-4 items-end justify-between"
     >
       <div className="flex flex-col w-[35%]">
         <label className="text-sm font-semibold mb-1">NOME:</label>
