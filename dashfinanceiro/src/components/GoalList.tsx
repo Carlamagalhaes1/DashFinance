@@ -17,7 +17,7 @@ export function GoalList({ goals }: GoalListProps) {
       </h2>
 
       {goals.length === 0 ? (
-        <p className="text-gray-500 text-sm">Nenhuma meta adicionada ainda.</p>
+        <p className="text-gray-500 text-sm">Nenhuma meta adicionada ainda...</p>
       ) : (
         <div className="flex flex-col gap-3">
           {goals.map((goal, index) => (
